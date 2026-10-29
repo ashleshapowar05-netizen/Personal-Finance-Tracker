@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Add Expense | FinTrack</title>
+
+<link
+rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}"
+>
+
+</head>
+
+
+<body>
+
+<div class="app-shell">
+
+
+<aside class="sidebar">
+
+<div class="brand">
+Fin<span>Track</span>
+</div>
+
+
+<nav>
+
+<a href="{{ url_for('dashboard') }}">
+🏠 Dashboard
+</a>
+
+<a href="{{ url_for('add_income') }}">
+➕ Add Income
+</a>
+
+<a class="active"
+href="{{ url_for('add_expense') }}">
+➖ Add Expense
+</a>
+
+<a href="{{ url_for('transactions') }}">
+📋 Transactions
+</a>
+
+<a href="{{ url_for('logout') }}">
+🚪 Logout
+</a>
+
+</nav>
+
+</aside>
+
+
+<main class="main-content">
+
+
+<header class="topbar">
+
+<div>
+
+<p class="eyebrow">
+TRANSACTION
+</p>
+
+<h1>
+Add Expense
+</h1>
+
+</div>
+
+</header>
+
+
+<div class="form-panel">
+
+
+<form method="POST" class="form">
+
+
+<label>
+Amount (₹)
+</label>
+
+<input
+type="number"
+name="amount"
+min="0"
+step="0.01"
+placeholder="500"
+required
+>
+
+
+<label>
+Category
+</label>
+
+<select name="category" required>
+
+<option value="">
+Select Category
+</option>
+
+<option>Food</option>
+
+<option>Travel</option>
+
+<option>Shopping</option>
+
+<option>Education</option>
+
+<option>Bills</option>
+
+<option>Health</option>
+
+<option>Entertainment</option>
+
+<option>Other</option>
+
+</select>
+
+
+<label>
+Date
+</label>
+
+<input
+type="date"
+name="date"
+required
+>
+
+
+<label>
+Description
+</label>
+
+<textarea
+name="description"
+rows="4"
+placeholder="Lunch, travel, books..."
+></textarea>
+
+
+<div class="form-actions">
+
+
+<a
+class="btn secondary"
+href="{{ url_for('dashboard') }}"
+>
+
+Cancel
+
+</a>
+
+
+<button
+class="btn primary"
+type="submit"
+>
+
+Save Expense
+
+</button>
+
+
+</div>
+
+
+</form>
+
+</div>
+
+
+</main>
+
+</div>
+
+</body>
+
+</html>

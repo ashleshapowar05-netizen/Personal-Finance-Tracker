@@ -1,0 +1,488 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Dashboard | FinTrack</title>
+
+    <link rel="stylesheet"
+          href="{{ url_for('static', filename='style.css') }}">
+
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+</head>
+
+
+<body>
+
+<div class="app-shell">
+
+
+    <!-- ================= SIDEBAR ================= -->
+
+    <aside class="sidebar">
+
+        <div class="brand">
+            Fin<span>Track</span>
+        </div>
+
+
+        <nav>
+
+            <a href="{{ url_for('dashboard') }}"
+               class="active">
+                🏠 Dashboard
+            </a>
+
+
+            <a href="{{ url_for('add_income') }}">
+                ➕ Add Income
+            </a>
+
+
+            <a href="{{ url_for('add_expense') }}">
+                ➖ Add Expense
+            </a>
+
+
+            <a href="{{ url_for('transactions') }}">
+                📋 Transactions
+            </a>
+
+
+            <a href="{{ url_for('logout') }}">
+                🚪 Logout
+            </a>
+
+        </nav>
+
+    </aside>
+
+
+
+    <!-- ================= MAIN CONTENT ================= -->
+
+    <main class="main-content">
+
+
+        <!-- TOP HEADER -->
+
+        <header class="topbar">
+
+            <div>
+
+                <p class="eyebrow">
+                    FINANCE OVERVIEW
+                </p>
+
+
+                <h1>
+                    Good to see you,
+                    {{ session.get('user_name', 'User') }} 👋
+                </h1>
+
+            </div>
+
+
+            <a href="{{ url_for('add_expense') }}"
+               class="btn primary">
+
+                + Add Expense
+
+            </a>
+
+        </header>
+
+
+
+        <!-- ================= SUMMARY CARDS ================= -->
+
+        <section class="cards">
+
+
+            <!-- INCOME -->
+
+            <div class="stat-card">
+
+                <div class="stat-icon">
+                    ↗
+                </div>
+
+
+                <div>
+
+                    <p>Total Income</p>
+
+                    <h2>
+                        ₹{{ "%.2f"|format(income) }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- EXPENSE -->
+
+            <div class="stat-card expense-card">
+
+                <div class="stat-icon">
+                    ↘
+                </div>
+
+
+                <div>
+
+                    <p>Total Expenses</p>
+
+                    <h2>
+                        ₹{{ "%.2f"|format(expense) }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- BALANCE -->
+
+            <div class="stat-card balance-card">
+
+                <div class="stat-icon">
+                    ₹
+                </div>
+
+
+                <div>
+
+                    <p>Available Balance</p>
+
+                    <h2>
+                        ₹{{ "%.2f"|format(balance) }}
+                    </h2>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= CHART + QUICK ACTIONS ================= -->
+
+        <section class="dashboard-grid">
+
+
+            <!-- CHART -->
+
+            <div class="panel">
+
+                <div class="panel-head">
+
+                    <h3>
+                        Spending Breakdown
+                    </h3>
+
+                    <p class="muted">
+                        Where your money goes
+                    </p>
+
+                </div>
+
+
+                <div class="chart-wrap">
+
+                    <canvas id="expenseChart"></canvas>
+
+                </div>
+
+                <script>
+                    document.addEventListener("DOMContentLoaded", function () {
+                        const canvas = document.getElementById("expenseChart");
+                        if (!canvas) return;
+
+                        const labels = {{ category_rows|map(attribute='category')|list|tojson }};
+                        const values = {{ category_rows|map(attribute='total')|list|tojson }};
+
+                        new Chart(canvas, {
+                            type: "doughnut",
+                            data: {
+                                labels: labels.length ? labels : ["No Data"],
+                                datasets: [{
+                                    data: values.length ? values : [1],
+                                    backgroundColor: [
+                                        "#4f46e5",
+                                        "#22c55e",
+                                        "#f59e0b",
+                                        "#ef4444",
+                                        "#06b6d4",
+                                        "#8b5cf6",
+                                        "#10b981"
+                                    ],
+                                    borderWidth: 0
+                                }]
+                            },
+                            options: {
+                                responsive: true,
+                                maintainAspectRatio: false,
+                                plugins: {
+                                    legend: {
+                                        position: "bottom"
+                                    }
+                                }
+                            }
+                        });
+                    });
+                </script>
+
+            </div>
+
+
+
+            <!-- QUICK ACTIONS -->
+
+            <div class="panel">
+
+                <div class="panel-head">
+
+                    <h3>
+                        Quick Actions
+                    </h3>
+
+                    <p class="muted">
+                        Manage your finances
+                    </p>
+
+                </div>
+
+
+                <div class="quick-actions">
+
+
+                    <a href="{{ url_for('add_income') }}"
+                       class="action">
+
+                        ➕
+
+                        <span>
+
+                            Add Income
+
+                            <small>
+                                Record money received
+                            </small>
+
+                        </span>
+
+                    </a>
+
+
+
+                    <a href="{{ url_for('add_expense') }}"
+                       class="action">
+
+                        ➖
+
+                        <span>
+
+                            Add Expense
+
+                            <small>
+                                Record money spent
+                            </small>
+
+                        </span>
+
+                    </a>
+
+
+
+                    <a href="{{ url_for('transactions') }}"
+                       class="action">
+
+                        📋
+
+                        <span>
+
+                            Transactions
+
+                            <small>
+                                View transaction history
+                            </small>
+
+                        </span>
+
+                    </a>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+
+        <!-- ================= RECENT TRANSACTIONS ================= -->
+
+        <section class="panel">
+
+
+            <div class="panel-head">
+
+                <div>
+
+                    <h3>
+                        Recent Transactions
+                    </h3>
+
+                    <p class="muted">
+                        Your latest activity
+                    </p>
+
+                </div>
+
+
+                <a href="{{ url_for('transactions') }}"
+                   class="text-link">
+
+                    View All →
+
+                </a>
+
+            </div>
+
+
+
+            <div class="table-wrap">
+
+                <table>
+
+                    <thead>
+
+                        <tr>
+
+                            <th>Date</th>
+
+                            <th>Category</th>
+
+                            <th>Description</th>
+
+                            <th>Type</th>
+
+                            <th>Amount</th>
+
+                        </tr>
+
+                    </thead>
+
+
+                    <tbody>
+
+
+                        {% if recent %}
+
+                            {% for row in recent %}
+
+                            <tr>
+
+                                <td>
+                                    {{ row.date }}
+                                </td>
+
+
+                                <td>
+
+                                    <strong>
+                                        {{ row.category }}
+                                    </strong>
+
+                                </td>
+
+
+                                <td>
+
+                                    {{ row.description or "—" }}
+
+                                </td>
+
+
+                                <td>
+
+                                    {% if row.type == "Income" %}
+
+                                        <span class="badge income">
+                                            Income
+                                        </span>
+
+                                    {% else %}
+
+                                        <span class="badge expense">
+                                            Expense
+                                        </span>
+
+                                    {% endif %}
+
+                                </td>
+
+
+                                <td>
+
+                                    {% if row.type == "Income" %}
+
+                                        +
+
+                                    {% else %}
+
+                                        -
+
+                                    {% endif %}
+
+                                    ₹{{ "%.2f"|format(row.amount) }}
+
+                                </td>
+
+                            </tr>
+
+                            {% endfor %}
+
+
+                        {% else %}
+
+                            <tr>
+
+                                <td colspan="5"
+                                    style="text-align:center;">
+
+                                    No transactions yet.
+
+                                </td>
+
+                            </tr>
+
+                        {% endif %}
+
+
+                    </tbody>
+
+                </table>
+
+            </div>
+
+        </section>
+
+
+    </main>
+
+</div>
+
+
+

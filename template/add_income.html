@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<title>Add Income | FinTrack</title>
+
+<link
+rel="stylesheet"
+href="{{ url_for('static', filename='style.css') }}"
+>
+
+</head>
+
+
+<body>
+
+<div class="app-shell">
+
+
+<aside class="sidebar">
+
+<div class="brand">
+Fin<span>Track</span>
+</div>
+
+
+<nav>
+
+<a href="{{ url_for('dashboard') }}">
+🏠 Dashboard
+</a>
+
+<a class="active"
+href="{{ url_for('add_income') }}">
+➕ Add Income
+</a>
+
+<a href="{{ url_for('add_expense') }}">
+➖ Add Expense
+</a>
+
+<a href="{{ url_for('transactions') }}">
+📋 Transactions
+</a>
+
+<a href="{{ url_for('logout') }}">
+🚪 Logout
+</a>
+
+</nav>
+
+</aside>
+
+
+<main class="main-content">
+
+
+<header class="topbar">
+
+<div>
+
+<p class="eyebrow">
+TRANSACTION
+</p>
+
+<h1>
+Add Income
+</h1>
+
+</div>
+
+</header>
+
+
+<div class="form-panel">
+
+
+<form method="POST" class="form">
+
+
+<label>
+Amount (₹)
+</label>
+
+<input
+type="number"
+name="amount"
+min="0"
+step="0.01"
+placeholder="30000"
+required
+>
+
+
+<label>
+Category
+</label>
+
+<select name="category" required>
+
+<option value="">
+Select Category
+</option>
+
+<option>
+Salary
+</option>
+
+<option>
+Freelance
+</option>
+
+<option>
+Business
+</option>
+
+<option>
+Scholarship
+</option>
+
+<option>
+Other
+</option>
+
+</select>
+
+
+<label>
+Date
+</label>
+
+<input
+type="date"
+name="date"
+required
+>
+
+
+<label>
+Description
+</label>
+
+<textarea
+name="description"
+rows="4"
+placeholder="Monthly salary..."
+></textarea>
+
+
+<div class="form-actions">
+
+
+<a
+class="btn secondary"
+href="{{ url_for('dashboard') }}"
+>
+
+Cancel
+
+</a>
+
+
+<button
+class="btn primary"
+type="submit"
+>
+
+Save Income
+
+</button>
+
+
+</div>
+
+
+</form>
+
+</div>
+
+
+</main>
+
+</div>
+
+</body>
+
+</html>
